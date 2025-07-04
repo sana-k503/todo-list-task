@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>To-do-List</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+        background: #fff;
+    }
+    .todo-container {
+        background: #62b2d3;
+        max-width: 90vw;
+        margin: 0 auto;
+        padding: 30px 20px 20px 20px;
+        min-width: 350px;
+        border-radius: 0 0 4px 4px;
+    }
+    .todo-title {
+        color: #fff;
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+    .todo-input-group .form-control {
+        border: none;
+        border-radius: 0;
+        font-size: 1.1rem;
+        padding-left: 16px;
+    }
+    .add-btn {
+        background-color: #d1d1d1;
+        color: #787878;
+        border: none;
+        min-width: 120px;
+        font-weight: 500;
+        border-radius: 0;
+        font-size: 1.1rem;
+        transition: background 0.2s, color 0.2s;
+    }
+    .add-btn:active, .add-btn:focus {
+        background: #bcbcbc;
+        color: #333;
+    }
+    #activityList {
+        margin-top: 0;
+        width: 100%;
+    }
+    .list-group-item {
+        background: #b9c7cf;
+        color: #222;
+        border: 1px solid #aaa;
+        border-radius: 0;
+        font-size: 1.15rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.3s;
+        padding: 14px 18px;
+    }
+    .list-group-item:nth-child(odd) {
+        background: #b9c7cf;
+    }
+    .list-group-item:nth-child(even) {
+        background: #b0b0b0;
+    }
+    .remove-btn {
+        background: transparent;
+        border: none;
+        color: #444;
+        font-size: 1.5rem;
+        font-weight: 400;
+        outline: none;
+        transition: background 0.2s, color 0.2s;
+        padding: 0 14px;
+        border-radius: 2px;
+    }
+    .remove-btn:focus, .remove-btn:hover {
+        background: #ff6d6d;
+        color: #fff;
+    }
+    @media (max-width: 600px) {
+        .todo-container {
+            padding: 15px 3px 10px 3px;
+        }
+        .todo-title {
+            font-size: 1.3rem;
+        }
+        .add-btn {
+            min-width: 70px;
+            font-size: 1rem;
+        }
+    }
+  </style>
+</head>
+<body>
+  <div class="todo-container mt-0">
+    <h2 class="text-center todo-title">To-do-List</h2>
+    <div class="input-group mb-3 todo-input-group">
+      <input type="text" id="activityInput" class="form-control" placeholder="Add your activity here..." />
+      <div class="input-group-append">
+        <button class="btn add-btn" type="button" id="addBtn">Add</button>
+      </div>
+    </div>
+    <ul class="list-group" id="activityList"></ul>
+  </div>
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    let activities = JSON.parse(localStorage.getItem('activities')) || [];
+
+    function renderList() {
+      const activityList = document.getElementById('activityList');
+      activityList.innerHTML = '';
+      if (activities.length === 0) return;
+
+      activities.forEach((activity, idx) => {
+        const li = document.createElement('li');
+        li.className = 'list-group-item d-flex justify-content-between align-items-center';
+
+        const span = document.createElement('span');
+        span.innerText = activity;
+
+        const btn = document.createElement('button');
+        btn.className = 'remove-btn';
+        btn.innerHTML = '&times;';
+        btn.setAttribute('aria-label', 'Remove');
+        btn.addEventListener('click', () => {
+          activities.splice(idx, 1);
+          updateLocalStorage();
+          renderList();
+        });
+
+        li.appendChild(span);
+        li.appendChild(btn);
+        activityList.appendChild(li);
+      });
+    }
+
+    function updateLocalStorage() {
+      localStorage.setItem('activities', JSON.stringify(activities));
+    }
+
+    document.getElementById('addBtn').addEventListener('click', () => {
+      const input = document.getElementById('activityInput');
+      const value = input.value.trim();
+      if (value) {
+        activities.push(value);
+        input.value = '';
+        updateLocalStorage();
+        renderList();
+      }
+    });
+
+    document.getElementById('activityInput').addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') {
+        document.getElementById('addBtn').click();
+      }
+    });
+
+    renderList();
+  </script>
+</body>
+</html>

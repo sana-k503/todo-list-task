@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Tabbed Navigation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    .tab-bar {
+      overflow: hidden;
+      background-color: blueviolet;
+      display: flex;
+    }
+
+    .tab-bar button {
+      background-color: inherit;
+      border: none;
+      outline: none;
+      font-weight: bold;
+      padding: 14px 20px;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      flex: 1;
+    }
+
+    .tab-bar button:hover {
+      background-color: plum;
+    }
+
+    .tab-bar button.active {
+      background-color: blueviolet; /* red */
+    }
+
+    .tab-content {
+      display: none;
+      border: 1px solid grey;
+      padding: 16px;
+      margin-top: -1px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Tabbed Navigation</h2>
+
+  <div class="tab-bar">
+    <button class="tablink active" onclick="openTab(event, 'Apple')">Apple</button>
+    <button class="tablink" onclick="openTab(event, 'Mango')">Mango</button>
+    <button class="tablink" onclick="openTab(event, 'Strawberry')">strawberry</button>
+  </div>
+
+  <div id="Apple" class="tab-content active">
+    <h3>Apple</h3>
+    <p>Apple is red.</p>
+  </div>
+
+  <div id="Mango" class="tab-content">
+    <h3>Mango</h3>
+    <p>Mango is yellow.</p>
+  </div>
+
+  <div id="Strawberry" class="tab-content">
+    <h3>strawberry</h3>
+    <p>Strawberry is pink.</p>
+  </div>
+
+  <script>
+    function openTab(evt, tabName) {
+      var i, tabcontent, tablinks;
+
+      tabcontent = document.getElementsByClassName("tab-content");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].classList.remove("active");
+      }
+
+      tablinks = document.getElementsByClassName("tablink");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].classList.remove("active");
+      }
+
+      document.getElementById(tabName).classList.add("active");
+      evt.currentTarget.classList.add("active");
+    }
+  </script>
+
+</body>
+</html>
